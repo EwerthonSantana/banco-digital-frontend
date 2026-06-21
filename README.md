@@ -1,7 +1,7 @@
 # Banco Digital — Front-end (Angular)
 
 Interface web para a **Banco Digital API** (back-end em **repositório
-separado**: **<INSIRA_AQUI_O_LINK_DO_REPO_BACKEND>**). Permite **login**
+separado**: **https://github.com/EwerthonSantana/banco-digital-api**). Permite **login**
 (mockado), visualizar **saldo**, **transferir** entre contas, consultar o
 **extrato** e fazer a **gestão de contas (CRUD)** — consumindo todos os
 endpoints da API.
