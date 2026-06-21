@@ -1,0 +1,14 @@
+# Compose autossuficiente do front-end (repositorio separado do back-end).
+#
+# Constroi a imagem Angular (servida por nginx) e a publica em localhost:4200.
+# Como o Angular e uma SPA, o navegador chama a API diretamente em
+# http://localhost:8080 — portanto a API precisa estar rodando separadamente
+# (pelo compose do back-end). Os dois nao compartilham rede Docker: a
+# comunicacao acontece pelo navegador, via porta publicada no host.
+
+services:
+  frontend:
+    build: .
+    container_name: bank-frontend
+    ports:
+      - "4200:80"
