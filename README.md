@@ -1,6 +1,7 @@
 # Banco Digital — Front-end (Angular)
 
-Interface web para a [Banco Digital API](../banco-digital-api). Permite **login**
+Interface web para a **Banco Digital API** (back-end em **repositório
+separado**: **<INSIRA_AQUI_O_LINK_DO_REPO_BACKEND>**). Permite **login**
 (mockado), visualizar **saldo**, **transferir** entre contas, consultar o
 **extrato** e fazer a **gestão de contas (CRUD)** — consumindo todos os
 endpoints da API.
@@ -30,12 +31,14 @@ de controle de fluxo `@if` / `@for` nos templates.
 ## Pré-requisitos
 
 - **Node.js 20+** e npm.
-- A **API rodando** em `http://localhost:8080` (veja o README do `banco-digital-api`).
-  O backend já inclui a configuração de CORS liberando `http://localhost:4200`.
+- A **API rodando** em `http://localhost:8080` (back-end em repositório separado;
+  suba o compose dele). O backend já inclui CORS liberando `http://localhost:4200`.
 
 ---
 
 ## Como rodar
+
+### Opção 1 — Local (desenvolvimento)
 
 ```bash
 cd banco-digital-frontend
@@ -52,7 +55,32 @@ Build de produção:
 npm run build
 ```
 
-(Os arquivos finais ficam em `dist/banco-digital-frontend`.)
+(Os arquivos finais ficam em `dist/banco-digital-frontend/browser`.)
+
+### Opção 2 — Docker
+
+Este projeto tem seu **próprio** `docker-compose.yml` (build Angular → **nginx**),
+independente do back-end. Primeiro suba a API (pelo compose do back-end, em
+`localhost:8080`); depois, na pasta deste projeto:
+
+```bash
+docker compose up --build
+```
+
+- Front-end: **http://localhost:4200**
+- API (repo separado): **http://localhost:8080**
+
+Como o front é uma SPA, **o navegador** é quem chama a API em
+`http://localhost:8080` (porta publicada no host pelo container da API) — por
+isso os dois compose **não** precisam compartilhar rede Docker, e não é preciso
+alterar a `apiBaseUrl`. O CORS do backend já libera `http://localhost:4200`.
+
+Para construir/rodar a imagem isoladamente, sem o compose:
+
+```bash
+docker build -t banco-digital-frontend .
+docker run -p 4200:80 banco-digital-frontend
+```
 
 ---
 
