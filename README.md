@@ -32,7 +32,8 @@ de controle de fluxo `@if` / `@for` nos templates.
 
 - **Node.js 20+** e npm.
 - A **API rodando** em `http://localhost:8080` (back-end em repositório separado;
-  suba o compose dele). O backend já inclui CORS liberando `http://localhost:4200`.
+  suba o compose dele). O backend já inclui CORS liberando `http://localhost:4200`
+  e `http://127.0.0.1:4200`.
 
 ---
 
@@ -67,13 +68,14 @@ independente do back-end. Primeiro suba a API (pelo compose do back-end, em
 docker compose up --build
 ```
 
-- Front-end: **http://localhost:4200**
-- API (repo separado): **http://localhost:8080**
+- Front-end: **http://127.0.0.1:4200**
+- API (repo separado): rodando em `http://localhost:8080`
 
-Como o front é uma SPA, **o navegador** é quem chama a API em
-`http://localhost:8080` (porta publicada no host pelo container da API) — por
-isso os dois compose **não** precisam compartilhar rede Docker, e não é preciso
-alterar a `apiBaseUrl`. O CORS do backend já libera `http://localhost:4200`.
+> **Use `127.0.0.1` em vez de `localhost`.** No Windows, `localhost` pode
+> resolver para IPv6 (`::1`), onde o Docker não publica a porta, causando
+> travamento. O front chama a API diretamente em `http://127.0.0.1:8080`
+> (IPv4) e o backend libera as origens `localhost:4200` **e** `127.0.0.1:4200`
+> no CORS. Por isso, acesse o app por `http://127.0.0.1:4200`.
 
 Para construir/rodar a imagem isoladamente, sem o compose:
 
@@ -235,7 +237,8 @@ A separação pedida foi aplicada de forma explícita:
 
 ## Observações
 
-- A URL da API fica em `src/environments/environment.ts` (`apiBaseUrl`). Ajuste
-  se o backend rodar em outra porta/host.
+- A URL da API fica em `src/environments/environment.ts` (`apiBaseUrl`,
+  apontando para `http://127.0.0.1:8080/api/v1`). Ajuste se o backend rodar em
+  outra porta/host.
 - Para o saldo aparecer e as transferências funcionarem, a API precisa estar no
   ar e com o banco populado (a migration cria 10 contas de clientes + a conta ADM).
