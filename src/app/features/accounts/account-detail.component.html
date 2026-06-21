@@ -1,0 +1,47 @@
+<div class="page-container narrow">
+  <div class="detail-header">
+    <a mat-icon-button routerLink="/accounts" aria-label="Voltar">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <h2>Detalhes da conta</h2>
+  </div>
+
+  @if (loading()) {
+    <div class="center"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else if (account(); as acc) {
+    <mat-card class="detail-card">
+      <div class="avatar">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <h3 class="name">{{ acc.name }}</h3>
+      @if (isOwnAccount()) {
+        <span class="badge">Você</span>
+      }
+
+      <div class="balance">
+        <span class="muted">Saldo atual</span>
+        <strong>{{ acc.balance | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+      </div>
+
+      <dl class="info">
+        <dt>ID da conta</dt>
+        <dd>{{ acc.id }}</dd>
+        <dt>Criada em</dt>
+        <dd>{{ acc.createdAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+        <dt>Atualizada em</dt>
+        <dd>{{ acc.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+      </dl>
+
+      <div class="detail-actions">
+        <a mat-stroked-button [routerLink]="['/accounts', acc.id, 'edit']">
+          <mat-icon>edit</mat-icon> Editar
+        </a>
+        @if (isOwnAccount()) {
+          <a mat-flat-button color="primary" routerLink="/statement">
+            <mat-icon>receipt_long</mat-icon> Ver extrato
+          </a>
+        }
+      </div>
+    </mat-card>
+  }
+</div>

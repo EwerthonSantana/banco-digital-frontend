@@ -1,0 +1,66 @@
+<div class="page-container">
+  <h2 class="greeting">Olá, {{ user()?.name }} 👋</h2>
+
+  @if (isAdmin()) {
+    <mat-card class="admin-card">
+      <mat-icon>admin_panel_settings</mat-icon>
+      <div>
+        <strong>Painel do administrador</strong>
+        <p class="muted">
+          Você pode criar novas contas e consultar o saldo de qualquer conta.
+        </p>
+      </div>
+    </mat-card>
+  }
+
+  <mat-card class="balance-card">
+    <div class="balance-row">
+      <div>
+        <span class="balance-label">Saldo disponível</span>
+        @if (loading()) {
+          <mat-spinner diameter="32"></mat-spinner>
+        } @else {
+          <div class="balance-value">
+            @if (showBalance()) {
+              {{ account()?.balance | currency: 'BRL' : 'symbol' : '1.2-2' }}
+            } @else {
+              <span>R$ ••••••</span>
+            }
+          </div>
+        }
+      </div>
+      <button mat-icon-button (click)="toggleBalance()" aria-label="Mostrar/ocultar saldo">
+        <mat-icon>{{ showBalance() ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+    </div>
+    <div class="account-meta muted">
+      Conta: {{ account()?.id }}
+    </div>
+  </mat-card>
+
+  <h3 class="section-title">O que você deseja fazer?</h3>
+  <div class="actions-grid">
+    <a class="action-card" routerLink="/transfer">
+      <mat-icon>swap_horiz</mat-icon>
+      <span>Transferir</span>
+    </a>
+    <a class="action-card" routerLink="/statement">
+      <mat-icon>receipt_long</mat-icon>
+      <span>Extrato</span>
+    </a>
+    <a class="action-card" [routerLink]="['/accounts', user()?.accountId]">
+      <mat-icon>account_circle</mat-icon>
+      <span>Minha conta</span>
+    </a>
+    <a class="action-card" routerLink="/accounts">
+      <mat-icon>group</mat-icon>
+      <span>Gerenciar contas</span>
+    </a>
+    @if (isAdmin()) {
+      <a class="action-card" routerLink="/accounts/new">
+        <mat-icon>person_add</mat-icon>
+        <span>Nova conta</span>
+      </a>
+    }
+  </div>
+</div>

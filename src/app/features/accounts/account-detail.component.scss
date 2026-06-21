@@ -1,0 +1,86 @@
+.narrow {
+  max-width: 520px;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.detail-card {
+  padding: 28px 24px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.avatar mat-icon {
+  font-size: 64px;
+  height: 64px;
+  width: 64px;
+  color: #1565c0;
+}
+
+.name {
+  margin: 8px 0 4px;
+}
+
+.badge {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.balance {
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    font-size: 2rem;
+    color: #1565c0;
+  }
+}
+
+.info {
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  margin: 0 0 24px;
+
+  dt {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 12px;
+  }
+
+  dd {
+    margin: 0;
+    word-break: break-all;
+  }
+}
+
+.detail-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+}

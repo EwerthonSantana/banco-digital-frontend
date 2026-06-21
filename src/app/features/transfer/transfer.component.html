@@ -1,0 +1,118 @@
+<div class="page-container narrow">
+  <h2>Transferência</h2>
+
+  @if (loading()) {
+    <div class="center"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+
+    <!-- FASE 1: formulario -->
+    @if (phase() === 'form') {
+      <mat-card class="form-card">
+        <div class="source-info">
+          <span class="muted">De</span>
+          <strong>{{ sourceAccount()?.name }}</strong>
+          <span class="muted">
+            Saldo: {{ sourceAccount()?.balance | currency: 'BRL' : 'symbol' : '1.2-2' }}
+          </span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="goToConfirm()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Conta de destino</mat-label>
+            <mat-select formControlName="destinationAccountId">
+              @for (acc of destinationOptions(); track acc.id) {
+                <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.destinationAccountId.touched && form.controls.destinationAccountId.invalid) {
+              <mat-error>Selecione a conta de destino</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Valor</mat-label>
+            <span matTextPrefix>R$&nbsp;</span>
+            <input
+              matInput
+              type="number"
+              formControlName="amount"
+              min="0.01"
+              step="0.01"
+              placeholder="0,00"
+            />
+            @if (form.controls.amount.touched && form.controls.amount.invalid) {
+              <mat-error>Informe um valor maior que zero</mat-error>
+            }
+          </mat-form-field>
+
+          <button mat-flat-button color="primary" type="submit" class="full-width">
+            Revisar
+          </button>
+        </form>
+      </mat-card>
+    }
+
+    <!-- FASE 2: confirmacao -->
+    @if (phase() === 'confirm') {
+      <mat-card class="form-card">
+        <h3>Confirme os dados</h3>
+        <div class="review-row">
+          <span class="muted">De</span>
+          <strong>{{ sourceAccount()?.name }}</strong>
+        </div>
+        <div class="review-row">
+          <span class="muted">Para</span>
+          <strong>{{ selectedDestination?.name }}</strong>
+        </div>
+        <div class="review-row amount">
+          <span class="muted">Valor</span>
+          <strong>{{ form.controls.amount.value | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+        </div>
+
+        <div class="confirm-actions">
+          <button mat-stroked-button (click)="backToForm()" [disabled]="submitting()">
+            Voltar
+          </button>
+          <button mat-flat-button color="primary" (click)="confirm()" [disabled]="submitting()">
+            @if (submitting()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              Confirmar transferência
+            }
+          </button>
+        </div>
+      </mat-card>
+    }
+
+    <!-- FASE 3: sucesso -->
+    @if (phase() === 'done' && result(); as res) {
+      <mat-card class="form-card success-card">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <h3>Transferência concluída!</h3>
+
+        <div class="review-row amount">
+          <span class="muted">Valor transferido</span>
+          <strong>{{ res.amount | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+        </div>
+        <div class="review-row">
+          <span class="muted">Novo saldo</span>
+          <strong>{{ res.sourceBalanceAfter | currency: 'BRL' : 'symbol' : '1.2-2' }}</strong>
+        </div>
+        <div class="review-row">
+          <span class="muted">Comprovante</span>
+          <code>{{ res.transferId }}</code>
+        </div>
+
+        <p class="notification-note">
+          <mat-icon>notifications_active</mat-icon>
+          Uma notificação foi enviada às partes envolvidas.
+        </p>
+
+        <div class="confirm-actions">
+          <button mat-stroked-button (click)="reset()">Nova transferência</button>
+          <a mat-flat-button color="primary" routerLink="/statement">Ver extrato</a>
+        </div>
+      </mat-card>
+    }
+  }
+</div>

@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <span class="brand" routerLink="/home">
+    <mat-icon>account_balance</mat-icon>
+    Banco Digital
+  </span>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/home" routerLinkActive="active-link">
+      <mat-icon>home</mat-icon> Início
+    </a>
+    <a mat-button routerLink="/transfer" routerLinkActive="active-link">
+      <mat-icon>swap_horiz</mat-icon> Transferir
+    </a>
+    <a mat-button routerLink="/statement" routerLinkActive="active-link">
+      <mat-icon>receipt_long</mat-icon> Extrato
+    </a>
+    <a mat-button routerLink="/accounts" routerLinkActive="active-link">
+      <mat-icon>group</mat-icon> Contas
+    </a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+    <mat-icon>{{ isAdmin() ? 'admin_panel_settings' : 'account_circle' }}</mat-icon>
+    {{ user()?.name }}
+    @if (isAdmin()) {
+      <span class="role-badge">ADM</span>
+    }
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <a mat-menu-item [routerLink]="['/accounts', user()?.accountId]">
+      <mat-icon>person</mat-icon> Minha conta
+    </a>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<main>
+  <router-outlet />
+</main>

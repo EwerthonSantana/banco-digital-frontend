@@ -1,0 +1,75 @@
+<div class="login-wrapper">
+  <mat-card class="login-card">
+    <div class="login-header">
+      <mat-icon class="login-logo">account_balance</mat-icon>
+      <h1>Banco Digital</h1>
+      <p class="muted">Acesse sua conta</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Usuário</mat-label>
+        <input matInput formControlName="username" autocomplete="username" />
+        <mat-icon matSuffix>person</mat-icon>
+        @if (form.controls.username.touched && form.controls.username.invalid) {
+          <mat-error>Informe o usuário</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="togglePassword()"
+          [attr.aria-label]="'Mostrar senha'"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>Informe a senha</mat-error>
+        }
+      </mat-form-field>
+
+      @if (loginError()) {
+        <div class="login-error">
+          <mat-icon>error_outline</mat-icon>
+          Usuário ou senha inválidos.
+        </div>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="full-width login-btn"
+      >
+        Entrar
+      </button>
+    </form>
+
+    <div class="demo-box">
+      <strong>Acesso de demonstração</strong>
+      <p class="demo-hint">
+        Usuário = nome da conta · senha <code>123</code> para todos.
+      </p>
+      <ul>
+        @for (acc of demoAccounts; track acc.accountId) {
+          <li>
+            <code>{{ acc.name }}</code>
+            @if (acc.role === 'ADMIN') {
+              <span class="adm-tag">ADM · R$ 1.000.000</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  </mat-card>
+</div>

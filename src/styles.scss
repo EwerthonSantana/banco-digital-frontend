@@ -1,0 +1,57 @@
+/* Estilos globais da aplicacao */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f4f6f9;
+  color: #1f2430;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Utilitarios simples reutilizaveis */
+.page-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-credit {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.text-debit {
+  color: #c62828;
+  font-weight: 500;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+/* Cores dos toasts (snackbar) */
+.toast-success {
+  --mdc-snackbar-container-color: #2e7d32;
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+.toast-error {
+  --mdc-snackbar-container-color: #c62828;
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}

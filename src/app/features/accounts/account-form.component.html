@@ -1,0 +1,44 @@
+<div class="page-container narrow">
+  <h2>{{ isEdit() ? 'Editar conta' : 'Nova conta' }}</h2>
+
+  <mat-card class="form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome do titular</mat-label>
+        <input matInput formControlName="name" maxlength="150" />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <mat-error>Informe um nome válido (até 150 caracteres)</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Saldo inicial</mat-label>
+        <span matTextPrefix>R$&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          formControlName="initialBalance"
+          min="0"
+          step="0.01"
+        />
+        @if (isEdit()) {
+          <mat-hint>O saldo só é alterado por transferências.</mat-hint>
+        }
+        @if (form.controls.initialBalance.touched && form.controls.initialBalance.invalid) {
+          <mat-error>O saldo inicial não pode ser negativo</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-actions">
+        <a mat-stroked-button routerLink="/accounts">Cancelar</a>
+        <button mat-flat-button color="primary" type="submit" [disabled]="saving()">
+          @if (saving()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            {{ isEdit() ? 'Salvar' : 'Criar conta' }}
+          }
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

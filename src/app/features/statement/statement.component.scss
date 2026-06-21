@@ -1,0 +1,57 @@
+.statement-card {
+  padding: 8px 8px 0;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 0;
+  color: #6b7280;
+
+  mat-icon {
+    font-size: 42px;
+    height: 42px;
+    width: 42px;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.right {
+  text-align: right;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.chip-credit {
+  background: #e6f4ea;
+  color: #2e7d32;
+}
+
+.chip-debit {
+  background: #fdecea;
+  color: #c62828;
+}

@@ -1,0 +1,20 @@
+.narrow {
+  max-width: 520px;
+}
+
+.form-card {
+  padding: 24px;
+  border-radius: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+
+  a,
+  button {
+    min-width: 120px;
+  }
+}
