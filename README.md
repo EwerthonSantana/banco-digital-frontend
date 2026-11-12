@@ -1,45 +1,45 @@
-# Banco Digital — Front-end (Angular)
+# Banco Digital — Front end (Angular)
 
-Interface web para a **Banco Digital API** (back-end em **repositório
-separado**: **https://github.com/EwerthonSantana/banco-digital-api**). Permite **login**
-(mockado), visualizar **saldo**, **transferir** entre contas, consultar o
-**extrato** e fazer a **gestão de contas (CRUD)** — consumindo todos os
-endpoints da API.
+Web interface for the **Banco Digital API** (back end in a **separate
+repository**: **https://github.com/EwerthonSantana/banco-digital-api**). It supports
+(mocked) **login**, viewing the **balance**, **transferring** between accounts,
+checking the **statement**, and **account management (CRUD)** — consuming every
+endpoint of the API.
 
 ---
 
 ## Stack
 
-| Item | Tecnologia | Versão |
-|------|------------|--------|
+| Item | Technology | Version |
+|------|------------|---------|
 | Framework | Angular | 21 (LTS) |
 | UI | Angular Material | 21 |
-| Linguagem | TypeScript | 5.9 |
-| Estilo | SCSS | — |
-| Estado | Angular Signals | — |
+| Language | TypeScript | 5.9 |
+| Styling | SCSS | — |
+| State | Angular Signals | — |
 
-**Por que Angular 21?** É a versão mais recente em **LTS** (suporte até maio/2027),
-madura e estável. O Angular 22 (junho/2026) é muito novo ("signal-first",
-componentes selectorless) e foi evitado para reduzir risco de bugs.
+**Why Angular 21?** It's the latest **LTS** release (supported until May 2027),
+mature and stable. Angular 22 (June 2026) is very new ("signal-first",
+selectorless components) and was avoided to reduce the risk of bugs.
 
-A aplicação usa a arquitetura moderna do Angular: **componentes standalone**
-(sem NgModules), **lazy loading** por rota, **signals** para estado e a sintaxe
-de controle de fluxo `@if` / `@for` nos templates.
-
----
-
-## Pré-requisitos
-
-- **Node.js 20+** e npm.
-- A **API rodando** em `http://localhost:8080` (back-end em repositório separado;
-  suba o compose dele). O backend já inclui CORS liberando `http://localhost:4200`
-  e `http://127.0.0.1:4200`.
+The app uses modern Angular architecture: **standalone components** (no
+NgModules), route-level **lazy loading**, **signals** for state, and the
+`@if` / `@for` control-flow syntax in templates.
 
 ---
 
-## Como rodar
+## Prerequisites
 
-### Opção 1 — Local (desenvolvimento)
+- **Node.js 20+** and npm.
+- The **API running** at `http://localhost:8080` (back end in a separate repository;
+  start its compose). The back end already has CORS configured to allow
+  `http://localhost:4200` and `http://127.0.0.1:4200`.
+
+---
+
+## How to run
+
+### Option 1 — Local (development)
 
 ```bash
 cd banco-digital-frontend
@@ -47,37 +47,36 @@ npm install
 npm start
 ```
 
-Acesse **http://localhost:4200**. A aplicação recarrega automaticamente ao
-salvar arquivos.
+Open **http://localhost:4200**. The app reloads automatically when you save files.
 
-Build de produção:
+Production build:
 
 ```bash
 npm run build
 ```
 
-(Os arquivos finais ficam em `dist/banco-digital-frontend/browser`.)
+(Output files go to `dist/banco-digital-frontend/browser`.)
 
-### Opção 2 — Docker
+### Option 2 — Docker
 
-Este projeto tem seu **próprio** `docker-compose.yml` (build Angular → **nginx**),
-independente do back-end. Primeiro suba a API (pelo compose do back-end, em
-`localhost:8080`); depois, na pasta deste projeto:
+This project has its **own** `docker-compose.yml` (Angular build → **nginx**),
+independent of the back end. First start the API (via the back end's compose, at
+`localhost:8080`); then, in this project's folder:
 
 ```bash
 docker compose up --build
 ```
 
-- Front-end: **http://127.0.0.1:4200**
-- API (repo separado): rodando em `http://localhost:8080`
+- Front end: **http://127.0.0.1:4200**
+- API (separate repo): running at `http://localhost:8080`
 
-> **Use `127.0.0.1` em vez de `localhost`.** No Windows, `localhost` pode
-> resolver para IPv6 (`::1`), onde o Docker não publica a porta, causando
-> travamento. O front chama a API diretamente em `http://127.0.0.1:8080`
-> (IPv4) e o backend libera as origens `localhost:4200` **e** `127.0.0.1:4200`
-> no CORS. Por isso, acesse o app por `http://127.0.0.1:4200`.
+> **Use `127.0.0.1` instead of `localhost`.** On Windows, `localhost` may resolve
+> to IPv6 (`::1`), where Docker doesn't publish the port, causing the app to hang.
+> The front end calls the API directly at `http://127.0.0.1:8080` (IPv4), and the
+> back end allows both `localhost:4200` **and** `127.0.0.1:4200` origins in CORS.
+> That's why you should open the app at `http://127.0.0.1:4200`.
 
-Para construir/rodar a imagem isoladamente, sem o compose:
+To build/run the image on its own, without compose:
 
 ```bash
 docker build -t banco-digital-frontend .
@@ -88,157 +87,158 @@ docker run -p 4200:80 banco-digital-frontend
 
 ## Login (mock)
 
-Como o backend ainda não tem JWT, a autenticação é **simulada no front**. O
-**usuário é o nome exato da conta** no banco (sem diferenciar maiúsculas) e a
-**senha é `123` para todos**. As contas são as criadas pela migration da API:
+Since the back end doesn't have JWT yet, authentication is **simulated in the
+front end**. The **username is the exact account name** in the database
+(case-insensitive), and the **password is `123` for everyone**. The accounts are
+the ones created by the API's migration:
 
-| Usuário (nome) | Senha | Papel | Saldo inicial |
-|----------------|-------|-------|---------------|
-| `ADM` | `123` | ADMIN | R$ 1.000.000,00 |
-| `Maria Silva` | `123` | USER | R$ 1.000,00 |
-| `Joao Souza` | `123` | USER | R$ 500,00 |
-| `Ana Pereira` | `123` | USER | R$ 2.500,00 |
-| `Carlos Lima` | `123` | USER | R$ 750,00 |
-| `Beatriz Costa` | `123` | USER | R$ 3.200,00 |
-| `Pedro Santos` | `123` | USER | R$ 1.500,00 |
-| `Juliana Almeida` | `123` | USER | R$ 4.800,00 |
-| `Rafael Oliveira` | `123` | USER | R$ 980,00 |
-| `Fernanda Rocha` | `123` | USER | R$ 6.100,00 |
-| `Lucas Martins` | `123` | USER | R$ 250,00 |
+| Username (name) | Password | Role | Initial balance |
+|-----------------|----------|------|-----------------|
+| `ADM` | `123` | ADMIN | R$ 1,000,000.00 |
+| `Maria Silva` | `123` | USER | R$ 1,000.00 |
+| `Joao Souza` | `123` | USER | R$ 500.00 |
+| `Ana Pereira` | `123` | USER | R$ 2,500.00 |
+| `Carlos Lima` | `123` | USER | R$ 750.00 |
+| `Beatriz Costa` | `123` | USER | R$ 3,200.00 |
+| `Pedro Santos` | `123` | USER | R$ 1,500.00 |
+| `Juliana Almeida` | `123` | USER | R$ 4,800.00 |
+| `Rafael Oliveira` | `123` | USER | R$ 980.00 |
+| `Fernanda Rocha` | `123` | USER | R$ 6,100.00 |
+| `Lucas Martins` | `123` | USER | R$ 250.00 |
 
-O `ADM` é administrador **e** possui conta própria com saldo alto, para permitir
-tanto as ações administrativas quanto testes de transferência.
+`ADM` is an administrator **and** has its own account with a high balance, allowing
+both administrative actions and transfer testing.
 
-A sessão é guardada em `localStorage` (sobrevive ao refresh). Quando o backend
-tiver login real, basta trocar a implementação do `AuthService` — a interface
-pública (`login`, `logout`, `currentUser`, `isAuthenticated`, `isAdmin`)
-permanece a mesma.
+The session is stored in `localStorage` (it survives a page refresh). Once the back
+end has real login, you only need to swap the `AuthService` implementation — its
+public interface (`login`, `logout`, `currentUser`, `isAuthenticated`, `isAdmin`)
+stays the same.
 
-### Controle de acesso por papel (RBAC)
+### Role-based access control (RBAC)
 
-A autorização é feita por **guards de rota**, segregando o que cada papel pode
-fazer:
+Authorization is enforced by **route guards**, separating what each role can do:
 
-| Ação | ADMIN | USER (cliente) |
-|------|:-----:|:--------------:|
-| Listar contas (nomes) | ✅ | ✅ |
-| Ver saldo de **outras** contas | ✅ | ❌ |
-| Ver/usar a **própria** conta e saldo | ✅ | ✅ |
-| Criar conta | ✅ | ❌ |
-| Editar conta | qualquer | só a própria |
-| Excluir conta | ✅ | ❌ |
-| Transferir / Extrato | ✅ (tem conta própria) | ✅ |
+| Action | ADMIN | USER (customer) |
+|--------|:-----:|:---------------:|
+| List accounts (names) | ✅ | ✅ |
+| View **other** accounts' balances | ✅ | ❌ |
+| View/use their **own** account and balance | ✅ | ✅ |
+| Create account | ✅ | ❌ |
+| Edit account | any | own only |
+| Delete account | ✅ | ❌ |
+| Transfer / Statement | ✅ (has own account) | ✅ |
 
-Guards aplicados (`src/app/core/guards`):
+Guards in place (`src/app/core/guards`):
 
-- **`adminGuard`** → rota de criar conta (`/accounts/new`).
-- **`accountAccessGuard`** → detalhe e edição (`/accounts/:id`, `/accounts/:id/edit`):
-  libera para o ADMIN ou para o dono da conta; bloqueia os demais.
-- **`customerGuard`** → transferência e extrato: exige uma conta de cliente
-  (bloqueia o ADMIN, que não possui conta).
+- **`adminGuard`** → create-account route (`/accounts/new`).
+- **`accountAccessGuard`** → detail and edit (`/accounts/:id`, `/accounts/:id/edit`):
+  allows the ADMIN or the account owner; blocks everyone else.
+- **`customerGuard`** → transfer and statement: requires a customer account
+  (blocks the ADMIN, who has no account).
 
-Além dos guards, a UI esconde o que o papel não pode ver — para o USER, a coluna
-de **saldo** das outras contas e as ações administrativas não aparecem.
+Beyond the guards, the UI hides what each role isn't allowed to see — for USER, the
+**balance** column of other accounts and the administrative actions are hidden.
 
-> Observação: como o backend ainda não tem JWT/roles, esta autorização é feita
-> **no front**. Em produção, as mesmas regras precisam ser reforçadas no backend.
-
----
-
-## Telas e rotas
-
-| Rota | Tela | Endpoints consumidos |
-|------|------|----------------------|
-| `/login` | Login mockado | — (mock) |
-| `/home` | Dashboard com saldo e atalhos | `GET /accounts/{id}` |
-| `/transfer` | Transferência (form → confirmação → sucesso) | `GET /accounts`, `POST /transfers` |
-| `/statement` | Extrato bancário (paginado) | `GET /accounts/{id}/movements` |
-| `/accounts` | Lista de contas (CRUD) | `GET /accounts`, `DELETE /accounts/{id}` |
-| `/accounts/new` | Criar conta | `POST /accounts` |
-| `/accounts/:id` | Detalhe / saldo | `GET /accounts/{id}` |
-| `/accounts/:id/edit` | Editar conta | `GET` + `PUT /accounts/{id}` |
-
-Todas as rotas (exceto `/login`) são protegidas por um **guard de rota** que
-redireciona para o login se não houver sessão.
+> Note: since the back end doesn't have JWT/roles yet, this authorization happens
+> **in the front end**. In production, the same rules must be enforced on the back
+> end.
 
 ---
 
-## Arquitetura de pastas
+## Screens and routes
 
-A estrutura segrega responsabilidades em **core** (lógica transversal),
-**shared** (UI reutilizável) e **features** (telas por domínio):
+| Route | Screen | Endpoints consumed |
+|-------|--------|--------------------|
+| `/login` | Mocked login | — (mock) |
+| `/home` | Dashboard with balance and shortcuts | `GET /accounts/{id}` |
+| `/transfer` | Transfer (form → confirmation → success) | `GET /accounts`, `POST /transfers` |
+| `/statement` | Bank statement (paginated) | `GET /accounts/{id}/movements` |
+| `/accounts` | Account list (CRUD) | `GET /accounts`, `DELETE /accounts/{id}` |
+| `/accounts/new` | Create account | `POST /accounts` |
+| `/accounts/:id` | Detail / balance | `GET /accounts/{id}` |
+| `/accounts/:id/edit` | Edit account | `GET` + `PUT /accounts/{id}` |
+
+All routes (except `/login`) are protected by a **route guard** that redirects to
+login when there's no session.
+
+---
+
+## Folder architecture
+
+The structure separates responsibilities into **core** (cross-cutting logic),
+**shared** (reusable UI), and **features** (screens by domain):
 
 ```
 src/app
-├── core/                      # singletons e lógica de aplicação
-│   ├── models/                # DTOs (contrato da API) e modelos de sessão
+├── core/                      # singletons and application logic
+│   ├── models/                # DTOs (API contract) and session models
 │   │   ├── account.dto.ts
 │   │   ├── transfer.dto.ts
 │   │   ├── movement.dto.ts
 │   │   ├── page.dto.ts
 │   │   └── auth-user.model.ts
-│   ├── services/              # acesso HTTP e estado (camada de serviço)
+│   ├── services/              # HTTP access and state (service layer)
 │   │   ├── account.service.ts
 │   │   ├── transfer.service.ts
-│   │   ├── auth.service.ts    # autenticação mock (signals)
+│   │   ├── auth.service.ts    # mock authentication (signals)
 │   │   └── toast.service.ts
 │   ├── interceptors/
-│   │   └── error.interceptor.ts   # trata o ApiError da API globalmente
+│   │   └── error.interceptor.ts   # handles the API's ApiError globally
 │   └── guards/
 │       └── auth.guard.ts
-├── shared/                    # componentes/visual reutilizáveis
+├── shared/                    # reusable components/visuals
 │   ├── layout/                # toolbar + <router-outlet>
 │   └── components/
 │       └── confirm-dialog.component.ts
-├── features/                  # telas (camada de view), uma pasta por domínio
+├── features/                  # screens (view layer), one folder per domain
 │   ├── auth/                  # login
 │   ├── home/                  # dashboard
-│   ├── transfer/              # transferência
-│   ├── statement/             # extrato
-│   └── accounts/              # CRUD de contas
+│   ├── transfer/              # transfer
+│   ├── statement/             # statement
+│   └── accounts/              # account CRUD
 ├── app.config.ts              # providers (router, http, animations, locale)
-├── app.routes.ts              # rotas com lazy loading e guard
-└── app.component.ts           # raiz
+├── app.routes.ts              # routes with lazy loading and guard
+└── app.component.ts           # root
 ```
 
-### Separação de camadas (service / DTO / view)
+### Layer separation (service / DTO / view)
 
-A separação pedida foi aplicada de forma explícita:
+The separation is applied explicitly:
 
-- **DTO** (`core/models`): interfaces que **espelham o contrato da API**
-  (`AccountResponse`, `TransferRequest`, `MovementResponse`, `Page<T>`...). São o
-  formato de transporte, sem nenhuma lógica.
-- **Service** (`core/services`): concentram **toda a comunicação HTTP** e a
-  montagem de parâmetros/headers (ex.: a `Idempotency-Key` é gerada no
-  `TransferService`). Nenhum componente fala diretamente com `HttpClient`.
-- **View** (`features/**`): os componentes só cuidam de **apresentação e
-  interação**. Recebem/enviam DTOs através dos services e expõem estado via
-  signals. Não conhecem URLs nem detalhes de HTTP.
-
----
-
-## Decisões de design
-
-- **Standalone + lazy loading:** cada tela é carregada sob demanda
-  (`loadComponent`), reduzindo o bundle inicial.
-- **Signals para estado local:** estado de carregamento, dados e fases (ex.: o
-  fluxo de 3 etapas da transferência) usam `signal`/`computed`, sem boilerplate
-  de RxJS onde não é necessário.
-- **Interceptor de erros:** o corpo de erro padronizado da API (`ApiError`,
-  inclusive `fieldErrors`) é traduzido em mensagens amigáveis num único lugar e
-  exibido via snackbar — saldo insuficiente, validação, etc.
-- **Idempotência ponta a ponta:** o front gera uma `Idempotency-Key` por
-  transferência, exercitando o recurso de idempotência do backend e evitando
-  duplicidade em clique duplo / retry.
-- **Confirmação antes de efetivar:** a transferência tem uma etapa de revisão,
-  reduzindo erros do usuário; e a exclusão de conta usa um diálogo de confirmação.
+- **DTO** (`core/models`): interfaces that **mirror the API contract**
+  (`AccountResponse`, `TransferRequest`, `MovementResponse`, `Page<T>`...). They are
+  the transport format, with no logic.
+- **Service** (`core/services`): hold **all HTTP communication** and the
+  building of parameters/headers (e.g., the `Idempotency-Key` is generated in
+  `TransferService`). No component talks to `HttpClient` directly.
+- **View** (`features/**`): components only handle **presentation and
+  interaction**. They send/receive DTOs through the services and expose state via
+  signals. They know nothing about URLs or HTTP details.
 
 ---
 
-## Observações
+## Design decisions
 
-- A URL da API fica em `src/environments/environment.ts` (`apiBaseUrl`,
-  apontando para `http://127.0.0.1:8080/api/v1`). Ajuste se o backend rodar em
-  outra porta/host.
-- Para o saldo aparecer e as transferências funcionarem, a API precisa estar no
-  ar e com o banco populado (a migration cria 10 contas de clientes + a conta ADM).
+- **Standalone + lazy loading:** each screen is loaded on demand
+  (`loadComponent`), reducing the initial bundle.
+- **Signals for local state:** loading state, data, and phases (e.g., the 3-step
+  transfer flow) use `signal`/`computed`, without RxJS boilerplate where it isn't
+  needed.
+- **Error interceptor:** the API's standardized error body (`ApiError`, including
+  `fieldErrors`) is translated into friendly messages in a single place and shown
+  via a snackbar — insufficient balance, validation, etc.
+- **End-to-end idempotency:** the front end generates an `Idempotency-Key` per
+  transfer, exercising the back end's idempotency feature and preventing duplicates
+  on double clicks / retries.
+- **Confirmation before committing:** the transfer has a review step, reducing user
+  errors; account deletion uses a confirmation dialog.
+
+---
+
+## Notes
+
+- The API URL is set in `src/environments/environment.ts` (`apiBaseUrl`, pointing
+  to `http://127.0.0.1:8080/api/v1`). Adjust it if the back end runs on another
+  port/host.
+- For balances to show up and transfers to work, the API must be running with a
+  seeded database (the migration creates 10 customer accounts + the ADM account).
